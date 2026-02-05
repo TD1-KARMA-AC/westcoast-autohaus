@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
-const express = require('express');
 const path = require('path');
+const express = require('express');
 const cors = require('cors');
 
 const app = express();
@@ -13,7 +13,13 @@ let lastScrapedAt = null;
 
 function getChromiumPath() {
   if (process.env.PUPPETEER_EXECUTABLE_PATH) return process.env.PUPPETEER_EXECUTABLE_PATH;
-  if (process.platform === 'linux') return '/usr/bin/chromium';
+  if (process.platform !== 'linux') return undefined;
+  const candidates = ['/usr/bin/chromium', '/usr/bin/chromium-browser', '/usr/bin/google-chrome'];
+  for (const p of candidates) {
+    try {
+      if (fs.existsSync(p)) return p;
+    } catch (_) {}
+  }
   return undefined;
 }
 
