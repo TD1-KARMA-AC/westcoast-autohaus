@@ -4,7 +4,7 @@ FROM node:18-bookworm-slim
 # Chromium + deps for Puppeteer (no Puppeteer download in npm install)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     chromium \
-    libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libgbm1 libasound2t64 \
+    libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libgbm1 libasound2 \
     libpangocairo-1.0-0 libxss1 libgtk-3-0 libxshmfence1 libglu1-mesa \
     && rm -rf /var/lib/apt/lists/*
 
