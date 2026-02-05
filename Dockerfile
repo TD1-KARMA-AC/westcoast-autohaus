@@ -17,7 +17,7 @@ COPY package.json package-lock.json ./
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
 
 # Install deps (cached unless package*.json change; cache mount speeds repeat builds)
-RUN --mount=type=cache,target=/root/.npm \
+RUN --mount=type=cache,id=autohaus-npm,target=/root/.npm \
     npm install --no-audit
 
 # Copy app source
