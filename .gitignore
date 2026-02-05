@@ -1,5 +1,4 @@
 node_modules
-/build
 inventory.json
 .env
 .env.local

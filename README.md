@@ -47,7 +47,7 @@ To work on the frontend with hot reload, run in two terminals:
 
 4. **Optional**: In **Variables**, add `NODE_ENV=production`.
 
-5. **Deploy**: Railway will build (from `nixpacks.toml`) then start with `npm start`. After the build finishes, open the generated URL to see the live app.
+5. **Deploy**: Railway uses the **Dockerfile**. The image expects a pre-built `build/` folder (so the build finishes within the timeout). **After changing the frontend**, run `npm run build` and commit the `build/` folder, then push. After the build finishes, open the generated URL to see the live app.
 
 The app serves the React build and `/api/inventory` from the same Node process.
 

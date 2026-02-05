@@ -16,14 +16,11 @@ COPY package.json package-lock.json ./
 # Skip Puppeteer Chromium download; use system Chromium above
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
 
-# Install deps (layer cached unless package*.json change)
-RUN npm install --no-audit
+# Install production deps only (no react-scripts = fast; layer cached unless package*.json change)
+RUN npm install --omit=dev --no-audit
 
-# Copy app source
+# Copy app source and pre-built React app (run 'npm run build' before deploy)
 COPY . .
-
-# Build React app
-RUN npm run build
 
 EXPOSE 3000
 
