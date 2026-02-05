@@ -11,12 +11,21 @@ app.use(express.static(path.join(__dirname, 'build')));
 let inventory = [];
 let lastScrapedAt = null;
 
+function getChromiumPath() {
+  if (process.env.PUPPETEER_EXECUTABLE_PATH) return process.env.PUPPETEER_EXECUTABLE_PATH;
+  if (process.platform === 'linux') return '/usr/bin/chromium';
+  return undefined;
+}
+
 async function scrapeWestCoastAutos() {
   console.log('🚀 Scraping...');
-  const browser = await puppeteer.launch({
+  const launchOpts = {
     headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
-  });
+  };
+  const chromiumPath = getChromiumPath();
+  if (chromiumPath) launchOpts.executablePath = chromiumPath;
+  const browser = await puppeteer.launch(launchOpts);
 
   const page = await browser.newPage();
 
