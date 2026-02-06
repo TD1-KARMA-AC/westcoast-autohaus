@@ -1,6 +1,6 @@
 # Stop build timeout – use the pre-built image
 
-Railway is still **building** from the Dockerfile, which times out. You need to **switch** this service to **pull the image** from GitHub instead.
+**This repo no longer has a Dockerfile in the root.** Railway will not build from source. You **must** run the app by **deploying from the pre-built image**.
 
 ---
 
@@ -13,17 +13,22 @@ Railway is still **building** from the Dockerfile, which times out. You need to 
 
 ---
 
-## Step 2: Point Railway at the image (stop building)
+## Step 2: Use a service that pulls the image (required)
 
-1. Go to **https://railway.app** → your project → click your **westcoast-autohaus** service.
-2. Open **Settings** (or the service’s **⋮** menu).
-3. Find **Source** / **Build** / **Deploy** (wording varies).
-4. You want to **change from “GitHub” or “Dockerfile”** to **“Docker Image”** or **“Image”**.
-5. Set the image to:
+The repo no longer contains a Dockerfile, so **do not** use “Deploy from GitHub repo” for this app.
+
+1. Go to **https://railway.app** → your project.
+2. **Add a new service** (or use an existing one): click **+ New** → **Empty Service** or **Deploy from image**.
+3. If you see **“Deploy from image”** or **“Docker image”**: choose it and set the image to:
    ```text
    ghcr.io/td1-karma-ac/westcoast-autohaus:latest
    ```
-6. Save. Railway will **pull** this image and **no longer run a build**, so no timeout.
+4. If you only see “GitHub repo”: add the repo, then go to the new service → **Settings** → find **Source** and change it to **Image** / **Docker image**, and enter:
+   ```text
+   ghcr.io/td1-karma-ac/westcoast-autohaus:latest
+   ```
+5. **Generate domain**: Service → **Settings** → **Networking** → **Generate domain**.
+6. You can delete or ignore any old service that was “building” from the repo (it will now fail anyway).
 
 ---
 

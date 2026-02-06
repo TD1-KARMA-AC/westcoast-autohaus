@@ -1,3 +1,4 @@
+# Used by GitHub Actions only. Railway must NOT build – use "Deploy from image" with ghcr.io/td1-karma-ac/westcoast-autohaus:latest
 # Use Node 18 on Debian Bookworm (has Chromium in apt)
 FROM node:18-bookworm-slim
 

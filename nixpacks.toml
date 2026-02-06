@@ -1,9 +1,0 @@
-# Skip Puppeteer's Chromium download; use system Chromium (apt install) to speed build
-[phases.install]
-cmds = ["PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 npm install --no-audit"]
-
-[phases.build]
-cmds = ["npm run build"]
-
-[start]
-cmd = "npm start"
