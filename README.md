@@ -27,6 +27,8 @@ To work on the frontend with hot reload, run in two terminals:
 
 ## Railway deployment (no build timeout – image built on GitHub)
 
+**If your Railway build keeps timing out:** follow **[DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md)** to switch the service to pull the pre-built image instead of building.
+
 Railway’s build often times out when building the Docker image. This repo builds the image in **GitHub Actions** (no timeout) and pushes it to **GitHub Container Registry (GHCR)**. Railway then **pulls** that image instead of building.
 
 ### One-time setup
