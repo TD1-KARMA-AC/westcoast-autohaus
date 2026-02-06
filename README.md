@@ -25,29 +25,39 @@ To work on the frontend with hot reload, run in two terminals:
 - `npm run build` once, then `npm start` for the backend
 - Or use a separate React dev server and proxy API to the Node server.
 
-## Railway deployment (so the app is live and public)
+## Railway deployment (no build timeout – image built on GitHub)
 
-1. **Push this repo to GitHub** (if not already):
-   ```bash
-   cd c:\autohaus
-   git init
-   git add .
-   git commit -m "West Coast Autohaus app"
-   git branch -M main
-   git remote add origin https://github.com/TD1-KARMA-AC/westcoast-autohaus.git
-   git push -u origin main
+Railway’s build often times out when building the Docker image. This repo builds the image in **GitHub Actions** (no timeout) and pushes it to **GitHub Container Registry (GHCR)**. Railway then **pulls** that image instead of building.
+
+### One-time setup
+
+1. **Create a Railway project**  
+   Go to [railway.app](https://railway.app) → **New Project** → **Empty Project** (do not choose “Deploy from GitHub repo” for this service).
+
+2. **Add a service from an image**  
+   In the project, add a new service → choose **“Deploy from image”** or **“Docker image”**.  
+   Set the image to:
+   ```text
+   ghcr.io/td1-karma-ac/westcoast-autohaus:latest
    ```
+   (Use your GitHub org/username in lowercase if the repo is under a different account.)
 
-2. **Create a Railway project**: Go to [railway.app](https://railway.app) → **New Project** → **Deploy from GitHub repo** → select **TD1-KARMA-AC/westcoast-autohaus**.
-
-3. **Generate a public URL** so the app “pops up” on the web:
-   - Open your project → click the **service** (your app).
-   - Go to **Settings** → **Networking** (or **Public Networking**).
-   - Click **Generate domain** (or **Add public domain**). Railway will give you a URL like `https://westcoast-autohaus-production-xxxx.up.railway.app`.
+3. **Generate a public URL**  
+   Service → **Settings** → **Networking** → **Generate domain**. You’ll get a URL like `https://westcoast-autohaus-production-xxxx.up.railway.app`.
 
 4. **Optional**: In **Variables**, add `NODE_ENV=production`.
 
-5. **Deploy**: Railway uses the **Dockerfile**. The image expects a pre-built `build/` folder (so the build finishes within the timeout). **After changing the frontend**, run `npm run build` and commit the `build/` folder, then push. After the build finishes, open the generated URL to see the live app.
+### Deploying (after each change)
+
+1. **Push to `main`**  
+   On every push to `main`, the **“Build and push image”** GitHub Action runs: it builds the Docker image and pushes it to GHCR as `ghcr.io/<owner>/westcoast-autohaus:latest`.
+
+2. **Redeploy on Railway**  
+   - **Option A:** In Railway, open the service and click **Redeploy** (or **Deploy**). It will pull the latest image.  
+   - **Option B:** In the repo go to **Settings** → **Secrets and variables** → **Actions**, add a secret `RAILWAY_TOKEN` (from Railway → project **Settings** → **Generate token**). The workflow will then run `railway redeploy` after pushing the image so Railway pulls the new image automatically.
+
+3. **After frontend changes**  
+   Run `npm run build`, commit the updated `build/` folder, then push. The next image build will include it.
 
 The app serves the React build and `/api/inventory` from the same Node process.
 
