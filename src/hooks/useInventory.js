@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
-const API_BASE = '';
+// Netlify: set REACT_APP_INVENTORY_URL=/inventory.json. Else uses /api/inventory (Node).
+const INVENTORY_URL = process.env.REACT_APP_INVENTORY_URL || '/api/inventory';
 
 export function useInventory() {
   const [cars, setCars] = useState([]);
@@ -15,7 +16,7 @@ export function useInventory() {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`${API_BASE}/api/inventory`);
+        const res = await fetch(INVENTORY_URL);
         if (!res.ok) throw new Error('Failed to load inventory');
         const data = await res.json();
         if (cancelled) return;

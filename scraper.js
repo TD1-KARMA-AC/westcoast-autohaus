@@ -106,7 +106,7 @@ async function scrapeWestCoastAutos() {
     fs.writeFileSync(path.join(__dirname, 'inventory.json'), JSON.stringify({ cars, lastScrapedAt }, null, 2));
 
     await browser.close();
-    return cars;
+    return { cars, lastScrapedAt };
   } catch (error) {
     console.error('❌ Error:', error.message);
     try {
@@ -121,6 +121,8 @@ async function scrapeWestCoastAutos() {
     throw error;
   }
 }
+
+module.exports = { scrapeWestCoastAutos };
 
 app.get('/api/inventory', (req, res) => {
   res.json({ cars: inventory, lastScrapedAt });
@@ -146,4 +148,4 @@ async function start() {
   });
 }
 
-start();
+if (require.main === module) start();
